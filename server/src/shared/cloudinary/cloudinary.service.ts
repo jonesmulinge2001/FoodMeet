@@ -6,6 +6,8 @@
 import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
+import { Express } from 'express';
+
 
 export interface CloudinaryUploadResult extends UploadApiResponse {
   folder: string;

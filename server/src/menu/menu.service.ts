@@ -6,6 +6,8 @@ import {
   FoodMeetCloudinaryService,
   FoodMeetUploadType,
 } from '../shared/cloudinary/cloudinary.service';
+import { Express } from 'express';
+
 
 @Injectable()
 export class MenuService {
@@ -23,7 +25,7 @@ export class MenuService {
     file?: Express.Multer.File,
   ): Promise<MenuItem> {
     let imageUrl: string | undefined;
-
+  
     if (file) {
       const uploadResult = await this.cloudinaryService.uploadMedia(
         file,
@@ -31,7 +33,7 @@ export class MenuService {
       );
       imageUrl = uploadResult.secure_url;
     }
-
+  
     const menuItem = await this.prisma.menuItem.create({
       data: {
         restaurantId,
@@ -42,9 +44,11 @@ export class MenuService {
         isAvailable: dto.isAvailable ?? true,
       },
     });
-
+  
     return menuItem;
   }
+  
+
 
   // ================================
   // GET ALL MENU ITEMS FOR A RESTAURANT
