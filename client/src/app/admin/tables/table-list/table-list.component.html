@@ -1,0 +1,224 @@
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+  <!-- Header -->
+  <div class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 px-6 py-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="material-icons text-gray-600">table_restaurant</span>
+        <h2 class="text-xl font-semibold text-gray-800">Restaurant Tables</h2>
+        <span class="text-sm text-gray-500 font-normal">({{ tables.length }} tables)</span>
+      </div>
+      
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Table Form -->
+  <div class="p-6 border-b border-gray-100 bg-gradient-to-br from-gray-50 to-white">
+    <h3 class="text-lg font-medium text-gray-700 mb-4 flex items-center gap-2">
+      <span class="material-icons text-indigo-500">add_circle</span>
+      Add New Table
+    </h3>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+      <!-- Table Number -->
+      <div>
+        <label class="block mb-2">
+          <div class="flex items-center gap-2 text-gray-700 font-medium mb-1">
+            <span class="material-icons text-base text-indigo-500">numbers</span>
+            <span>Table Number</span>
+            <span class="text-rose-500">*</span>
+          </div>
+          <div class="relative">
+            <input
+              type="number"
+              [(ngModel)]="tableNumber"
+              placeholder="e.g., 1"
+              min="1"
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+            />
+            <span class="material-icons absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              table_bar
+            </span>
+          </div>
+        </label>
+      </div>
+
+      <!-- Seats Count -->
+      <div>
+        <label class="block mb-2">
+          <div class="flex items-center gap-2 text-gray-700 font-medium mb-1">
+            <span class="material-icons text-base text-indigo-500">chair</span>
+            <span>Seats Count</span>
+            <span class="text-rose-500">*</span>
+          </div>
+          <div class="relative">
+            <input
+              type="number"
+              [(ngModel)]="seatsCount"
+              placeholder="e.g., 4"
+              min="1"
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+            />
+            <span class="material-icons absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              people
+            </span>
+          </div>
+        </label>
+      </div>
+
+      <!-- Add Button -->
+      <div class="flex items-end">
+        <button
+          (click)="addTable()"
+          [disabled]="!tableNumber || !seatsCount"
+          class="w-full px-5 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-md hover:shadow-lg font-medium flex items-center justify-center gap-2"
+        >
+          <span class="material-icons">add</span>
+          <span>Add Table</span>
+        </button>
+      </div>
+    </div>
+
+    <p class="text-sm text-gray-500 flex items-center gap-1">
+      <span class="material-icons text-xs">info</span>
+      Tables will be created with the specified number of seats
+    </p>
+  </div>
+
+  <!-- Tables List -->
+  <div class="divide-y divide-gray-100">
+    <!-- Loading State -->
+    <div *ngIf="loading && tables.length === 0" class="p-8 text-center">
+      <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4"></div>
+      <p class="text-gray-600 font-medium">Loading tables...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && tables.length === 0" class="p-8 text-center">
+      <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
+        <span class="material-icons text-gray-400 text-3xl">table_restaurant</span>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-700 mb-2">No tables configured</h3>
+      <p class="text-gray-500 mb-6 max-w-md mx-auto">Add tables to start managing seating arrangements</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button
+          (click)="tableNumber = 1; seatsCount = 4"
+          class="px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-300 font-medium flex items-center gap-2"
+        >
+          <span class="material-icons">content_copy</span>
+          Use Example Values
+        </button>
+      </div>
+    </div>
+
+    <!-- Tables Grid -->
+    <div *ngIf="tables.length > 0" class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let table of tables"
+             class="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-all duration-300"
+             [class.border-indigo-300]="editingTableId === table.id"
+             [class.bg-gradient-to-br]="editingTableId === table.id"
+             [class.from-indigo-50]="editingTableId === table.id"
+             [class.to-purple-50]="editingTableId === table.id">
+          
+          <!-- Table Header -->
+          <div class="p-4 border-b border-gray-100">
+            <div class="flex items-center justify-between mb-3">
+              <!-- Display Mode -->
+              <div *ngIf="editingTableId !== table.id" class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg flex items-center justify-center">
+                  <span class="material-icons text-indigo-600 text-2xl">table_bar</span>
+                </div>
+                <div>
+                  <h3 class="font-bold text-gray-800 text-lg">Table #{{ table.tableNumber }}</h3>
+                  <div class="flex items-center gap-2 mt-1">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 rounded-full text-xs font-medium">
+                      <span class="material-icons text-xs">chair</span>
+                      {{ table.seats?.length || 0 }} seats
+                    </span>
+                    <span class="text-xs text-gray-500">ID: {{ table.id | slice:0:8 }}...</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Edit Mode -->
+              <div *ngIf="editingTableId === table.id" class="flex-1">
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-xs text-gray-600 mb-1">Table #</label>
+                    <div class="relative">
+                      <input
+                        type="number"
+                        [(ngModel)]="editTableNumber"
+                        min="1"
+                        class="w-full pl-8 pr-3 py-2 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      />
+                      <span class="material-icons absolute left-2 top-1/2 transform -translate-y-1/2 text-indigo-500 text-sm">
+                        edit
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex items-end">
+                    <button 
+                      (click)="saveEdit(table.id)"
+                      class="w-full px-3 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 text-sm font-medium flex items-center justify-center gap-1"
+                    >
+                      <span class="material-icons text-sm">check</span>
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Seats Component -->
+            <app-seat-list 
+              [tableId]="table.id" 
+              [seats]="table.seats || []"
+            ></app-seat-list>
+          </div>
+
+          <!-- Actions Footer -->
+          <div class="p-3 bg-gradient-to-r from-gray-50 to-gray-100">
+            <div class="flex items-center justify-between">
+              <!-- Status Badge -->
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                <span class="text-xs text-gray-600">Available</span>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex items-center gap-2">
+                <button 
+                  *ngIf="editingTableId !== table.id"
+                  (click)="startEdit(table)"
+                  class="p-2 bg-gradient-to-r from-blue-50 to-cyan-100 text-blue-700 rounded-lg hover:from-blue-100 hover:to-cyan-200 transition-all duration-300 flex items-center gap-1"
+                  title="Edit table"
+                >
+                  <span class="material-icons text-sm">edit</span>
+                  <span class="text-xs font-medium hidden sm:inline">Edit</span>
+                </button>
+                
+                <button 
+                  *ngIf="editingTableId === table.id"
+                  (click)="startEdit(table)"
+                  class="p-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center gap-1 text-xs"
+                >
+                  Cancel
+                </button>
+
+                <button 
+                  (click)="deleteTable(table.id)"
+                  class="p-2 bg-gradient-to-r from-rose-50 to-pink-100 text-rose-700 rounded-lg hover:from-rose-100 hover:to-pink-200 transition-all duration-300 flex items-center gap-1"
+                  title="Delete table"
+                >
+                  <span class="material-icons text-sm">delete</span>
+                  <span class="text-xs font-medium hidden sm:inline">Delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

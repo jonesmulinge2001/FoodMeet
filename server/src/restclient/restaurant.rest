@@ -1,0 +1,86 @@
+### Variables
+@baseUrl = http://localhost:3000
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZTAxNTA2Yi1iNjE3LTQ1NDUtYmM2Yi1hYWZmNGI1ZDVjYWQiLCJlbWFpbCI6ImpvbmF0aGFubXVsaW5nZW13YW5kaUBnbWFpbC5jb20iLCJyb2xlIjoiT1dORVIiLCJpYXQiOjE3Njk2NjkyNTAsImV4cCI6MTc2OTc1NTY1MH0.lkNCiwMfQ1BV-axKa7V8tiPPwUEEsi-tOFbejCtLIxM
+@restaurantId = 687e5304-cc69-4783-89a7-513a097a709a
+@tableId = d9408abe-a62c-42d0-a260-cd5c5faef597
+@seatId = your-seat-id
+
+### -----------------------------------------
+### RESTAURANT CRUD
+### -----------------------------------------
+
+### Create a Restaurant
+POST {{baseUrl}}/restaurants
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "USB Ndagani",
+  "location": "123 Main St"
+}
+
+### Get All Restaurants (Authenticated Owner)
+GET {{baseUrl}}/restaurants
+Authorization: Bearer {{authToken}}
+
+### Get Restaurant by ID
+GET {{baseUrl}}/restaurants/{{restaurantId}}
+Authorization: Bearer {{authToken}}
+
+
+### Update Restaurant
+PATCH {{baseUrl}}/restaurants/{{restaurantId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "The Updated Kitchen"
+}
+
+### Delete Restaurant
+DELETE {{baseUrl}}/restaurants/{{restaurantId}}
+
+
+### -----------------------------------------
+### TABLE CRUD
+### -----------------------------------------
+
+### Add Table to Restaurant
+POST {{baseUrl}}/restaurants/{{restaurantId}}/tables
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "tableNumber": 11,
+  "seatsCount": 4
+}
+
+### Update Table
+PATCH {{baseUrl}}/restaurants/tables/{{tableId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "tableNumber": 8
+}
+
+### Delete Table
+DELETE {{baseUrl}}/restaurants/tables/{{tableId}}
+
+
+### -----------------------------------------
+### SEAT CRUD
+### -----------------------------------------
+
+### Add Seat to Table
+POST {{baseUrl}}/restaurants/tables/{{tableId}}/seats
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "seatNumber": 4
+}
+
+
+### Delete Seat
+DELETE {{baseUrl}}/restaurants/seats/{{seatId}}

@@ -1,0 +1,42 @@
+@baseUrl = http://localhost:3000
+@restaurantId = 687e5304-cc69-4783-89a7-513a097a709a
+@menuItemId = 52513034-523e-4413-aae0-f1337bbb1c28
+@orderId = ORDER_ID_HERE
+@token = YOUR_JWT_TOKEN_HERE
+
+### CUSTOMER: PLACE ORDER
+POST {{baseUrl}}/orders/{{restaurantId}}
+Content-Type: application/json
+
+{
+  "orderType": "DINE_IN",
+  "items": [
+    {
+      "menuItemId": "{{menuItemId}}",
+      "quantity": 2
+    }
+  ],
+  "tableNumber": 1,
+  "seatNumber": 2
+}
+
+
+### WAITER / STAFF: VIEW ALL ORDERS
+GET {{baseUrl}}/orders/restaurant/{{restaurantId}}
+Authorization: Bearer {{token}}
+
+### WAITER: VIEW DINE-IN ORDERS
+GET {{baseUrl}}/orders/restaurant/{{restaurantId}}/dine-in
+
+### WAITER: VIEW TAKEAWAY ORDERS
+GET {{baseUrl}}/orders/restaurant/{{restaurantId}}/takeaway
+
+### WAITER: VIEW DELIVERY ORDERS
+GET {{baseUrl}}/orders/restaurant/{{restaurantId}}/delivery
+
+### WAITER: CONFIRM ORDER
+PATCH {{baseUrl}}/orders/{{orderId}}/confirm
+
+### WAITER: DELIVER ORDER
+PATCH {{baseUrl}}/orders/{{orderId}}/deliver
+

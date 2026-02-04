@@ -1,0 +1,42 @@
+@baseUrl = http://localhost:3000
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZTAxNTA2Yi1iNjE3LTQ1NDUtYmM2Yi1hYWZmNGI1ZDVjYWQiLCJlbWFpbCI6ImpvbmF0aGFubXVsaW5nZW13YW5kaUBnbWFpbC5jb20iLCJyb2xlIjoiT1dORVIiLCJpYXQiOjE3Njk2NjkyNTAsImV4cCI6MTc2OTc1NTY1MH0.lkNCiwMfQ1BV-axKa7V8tiPPwUEEsi-tOFbejCtLIxM
+@restaurantId = 687e5304-cc69-4783-89a7-513a097a709a
+@menuItemId = 52513034-523e-4413-aae0-f1337bbb1c28
+
+### CREATE MENU ITEM
+POST {{baseUrl}}/menu/{{restaurantId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Beef Burger",
+  "description": "Juicy beef burger with cheese",
+  "price": 550,
+  "isAvailable": true
+}
+
+### UPDATE MENU ITEM
+PATCH {{baseUrl}}/menu/item/{{menuItemId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Updated Beef Burger",
+  "price": 600,
+  "isAvailable": false
+}
+
+### GET ALL MENU ITEMS
+GET {{baseUrl}}/menu/{{restaurantId}}
+
+
+### GET SINGLE MENU ITEM (public)
+GET {{baseUrl}}/menu/item/{{menuItemId}}
+
+### UPDATE MENU ITEM (with optional image)
+PATCH {{baseUrl}}/menu/item/{{menuItemId}}
+Authorization: Bearer {{authToken}}
+
+### DELETE MENU ITEM
+DELETE {{baseUrl}}/menu/item/{{menuItemId}}
+Authorization: Bearer {{authToken}}

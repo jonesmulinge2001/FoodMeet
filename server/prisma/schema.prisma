@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String    @id @default(uuid())
+  email                String    @unique
+  password             String
+  name                 String
+  role                 UserRole  @default(CUSTOMER)
+  phone                String?   @unique
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  isVerified           Boolean   @default(false)
+  resetToken           String?
+  resetTokenExpiresAt  DateTime?
+  verifyToken          String
+  verifyTokenExpiresAt DateTime?
+  lastLogin            DateTime?
+  isDeleted            Boolean   @default(false)
+  deletedAt            DateTime?
+
+  // 🔹 Add back-relations
+  ownedRestaurants Restaurant[] @relation("OwnerRestaurants") // matches Restaurant.owner
+  orders           Order[]      @relation("CustomerOrders")   // matches Order.customer
+}
+
+enum UserRole {
+  OWNER
+  STAFF
+  CUSTOMER
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  DELIVERED
+}
+
+enum OrderType {
+  DINE_IN
+  DELIVERY
+  TAKEAWAY
+}
+
+model Restaurant {
+  id       String  @id @default(uuid())
+  name     String
+  location String?
+
+  ownerId String
+  owner   User   @relation("OwnerRestaurants", fields: [ownerId], references: [id])
+
+  tables    Table[]
+  menuItems MenuItem[]
+  orders    Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Table {
+  id          String @id @default(uuid())
+  tableNumber Int
+
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+
+  seats Seat[]  
+
+  createdAt DateTime @default(now())
+
+  @@unique([restaurantId, tableNumber])
+}
+
+
+model Seat {
+  id         String @id @default(uuid())
+  seatNumber Int
+
+  tableId String?
+  table   Table? @relation(fields: [tableId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([tableId, seatNumber])
+}
+
+
+model MenuItem {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  imageUrl    String?
+  isAvailable Boolean @default(true)
+
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  orderType   OrderType
+  status      OrderStatus @default(PENDING)
+  totalAmount Float
+
+  // DINE_IN specific
+  tableNumber Int?
+  seatNumber  Int?
+
+  // DELIVERY specific
+  deliveryAddress String?
+  deliveryPhone   String?
+
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+
+  customerId String?
+  customer   User? @relation("CustomerOrders", fields: [customerId], references: [id])
+
+  items OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderType])
+  @@index([status])
+}
+
+model OrderItem {
+  id        String @id @default(uuid())
+  quantity  Int
+  unitPrice Float
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+}

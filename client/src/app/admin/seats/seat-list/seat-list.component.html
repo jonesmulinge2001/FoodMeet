@@ -1,0 +1,54 @@
+<div class="mt-4 border rounded-lg p-4 bg-white shadow-sm">
+
+    <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+      <span class="material-icons text-gray-600">event_seat</span>
+      Seats
+    </h3>
+  
+    <!-- Add Seat -->
+    <div class="flex gap-2 mb-4">
+      <input
+        type="number"
+        [(ngModel)]="seatNumber"
+        placeholder="Seat number"
+        class="border px-3 py-2 rounded w-full"
+      />
+  
+      <button
+        (click)="addSeat()"
+        [disabled]="loading"
+        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+      >
+        Add
+      </button>
+    </div>
+  
+    <!-- Seats List -->
+    <div *ngIf="seats.length > 0; else noSeats">
+      <ul class="space-y-2">
+        <li
+          *ngFor="let seat of seats"
+          class="flex justify-between items-center border p-2 rounded"
+        >
+          <span class="flex items-center gap-2">
+            <span class="material-icons text-gray-500">chair</span>
+            Seat #{{ seat.seatNumber }}
+          </span>
+  
+          <button
+            (click)="deleteSeat(seat.id)"
+            class="text-red-600 hover:text-red-800"
+          >
+            <span class="material-icons">delete</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  
+    <!-- Empty State -->
+    <ng-template #noSeats>
+      <p class="text-gray-500 text-sm">No seats added yet.</p>
+    </ng-template>
+  
+  </div>
+  
