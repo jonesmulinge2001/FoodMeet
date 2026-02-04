@@ -18,9 +18,9 @@ import { CreateRestaurantDto } from '../dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from '../dto/update-restaurant.dto';
 import { createTableDto } from '../dto/create-table.dto';
 import { UpdateTableDto } from '../dto/update-table.dto';
-import { RequestWithUser } from 'src/dto/requestWithUser';
-import { JwtAuthGuard } from 'src/guards/jwt/jwtauth.guard';
-import { AddSeatDto } from 'src/dto/add-seat.dto';
+import { RequestWithUser } from '../dto/requestWithUser';
+import { JwtAuthGuard } from '../guards/jwt/jwtauth.guard';
+import { AddSeatDto } from '../dto/add-seat.dto';
 
 @Controller('restaurants')
 export class RestaurantsController {

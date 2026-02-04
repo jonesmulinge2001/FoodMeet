@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaClient, MenuItem } from 'generated/prisma/client';
-import { CreateMenuItemDto, UpdateMenuItemDto } from 'src/dto/menu-item.dto';
+import { CreateMenuItemDto, UpdateMenuItemDto } from '../dto/menu-item.dto';
 import {
   FoodMeetCloudinaryService,
   FoodMeetUploadType,
-} from 'src/shared/cloudinary/cloudinary.service';
+} from '../shared/cloudinary/cloudinary.service';
 
 @Injectable()
 export class MenuService {

@@ -2,9 +2,9 @@
 import { Module } from '@nestjs/common';
 import { MenuController } from './menu.controller';
 import { MenuService } from './menu.service';
-import { FoodMeetCloudinaryService } from 'src/shared/cloudinary/cloudinary.service';
-import { JwtService } from 'src/guards/jwt/jwt.service';
-import { PermissionService } from 'src/permissions/permission.service';
+import { FoodMeetCloudinaryService } from '../shared/cloudinary/cloudinary.service';
+import { JwtService } from '../guards/jwt/jwt.service';
+import { PermissionService } from '../permissions/permission.service';
 
 @Module({
   controllers: [MenuController],

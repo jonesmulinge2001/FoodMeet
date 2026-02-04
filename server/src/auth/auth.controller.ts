@@ -14,9 +14,9 @@ import {
   } from '@nestjs/common';
   import { AuthService } from './auth.service';
 import { User } from 'generated/prisma/browser';
-import { ApiResponse } from 'src/dto/apiResponse';
-import { LoginUserDto } from 'src/dto/login.user.dto';
-import { RegisterUserDto } from 'src/dto/register.user.dto';
+import { ApiResponse } from '../dto/apiResponse';
+import { LoginUserDto } from '../dto/login.user.dto';
+import { RegisterUserDto } from '../dto/register.user.dto';
 
   
   @Controller('auth')

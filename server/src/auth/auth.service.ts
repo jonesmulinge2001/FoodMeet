@@ -6,9 +6,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { PrismaClient } from 'generated/prisma/client';
-import { LoginUserDto } from 'src/dto/login.user.dto';
-import { RegisterUserDto } from 'src/dto/register.user.dto';
-import { MailerService } from 'src/shared/mailer/mailer.service';
+import { LoginUserDto } from '../dto/login.user.dto';
+import { RegisterUserDto } from '../dto/register.user.dto';
+import { MailerService } from '../shared/mailer/mailer.service';
 
 
 @Injectable()

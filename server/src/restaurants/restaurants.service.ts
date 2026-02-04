@@ -6,8 +6,8 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaClient } from 'generated/prisma/client';
 import { CreateRestaurantDto } from './../dto/create-restaurant.dto';
 import { createTableDto } from './../dto/create-table.dto';
-import { UpdateRestaurantDto } from 'src/dto/update-restaurant.dto';
-import { UpdateTableDto } from 'src/dto/update-table.dto';
+import { UpdateRestaurantDto } from '../dto/update-restaurant.dto';
+import { UpdateTableDto } from '../dto/update-table.dto';
 
 @Injectable()
 export class RestaurantsService {

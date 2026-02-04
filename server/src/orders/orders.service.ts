@@ -4,7 +4,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { OrdersGateway } from './orders.gateway';
 import { OrderStatus, OrderType, PrismaClient } from 'generated/prisma/client';
-import { CreateOrderDto } from 'src/dto/create-order.dto';
+import { CreateOrderDto } from '../dto/create-order.dto';
 
 @Injectable()
 export class OrdersService {

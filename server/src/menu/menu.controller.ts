@@ -14,12 +14,12 @@ import {
 } from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateMenuItemDto, UpdateMenuItemDto } from 'src/dto/menu-item.dto';
-import { JwtAuthGuard } from 'src/guards/jwt/jwtauth.guard';
-import { PermissionGuard } from 'src/guards/permissions.guard';
-import { RequirePermissions } from 'src/decorator/permissions.decorator';
-import { Permission } from 'src/permissions/permission.enum';
-import { RequestWithUser } from 'src/dto/requestWithUser';
+import { CreateMenuItemDto, UpdateMenuItemDto } from '../dto/menu-item.dto';
+import { JwtAuthGuard } from '../guards/jwt/jwtauth.guard';
+import { PermissionGuard } from '../guards/permissions.guard';
+import { RequirePermissions } from '../decorator/permissions.decorator';
+import { Permission } from '../permissions/permission.enum';
+import { RequestWithUser } from '../dto/requestWithUser';
 
 @Controller('menu')
 export class MenuController {

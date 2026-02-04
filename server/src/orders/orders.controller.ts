@@ -5,7 +5,7 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import { OrdersService } from './orders.service';
-import { CreateOrderDto } from 'src/dto/create-order.dto';
+import { CreateOrderDto } from '../dto/create-order.dto';
 
 @Controller('orders')
 export class OrdersController {

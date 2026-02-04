@@ -11,9 +11,9 @@ import {
     Injectable,
   } from '@nestjs/common';
   import { Reflector } from '@nestjs/core';
-import { REQUIRE_PERMISSIONS_KEY } from 'src/decorator/permissions.decorator';
-import { Permission } from 'src/permissions/permission.enum';
-  import { PermissionService } from 'src/permissions/permission.service';
+import { REQUIRE_PERMISSIONS_KEY } from '../decorator/permissions.decorator';
+import { Permission } from '../permissions/permission.enum';
+  import { PermissionService } from '../permissions/permission.service';
   
   @Injectable()
   export class PermissionGuard implements CanActivate {

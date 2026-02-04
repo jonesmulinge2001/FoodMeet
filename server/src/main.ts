@@ -19,7 +19,7 @@ async function bootstrap() {
   
 
   app.enableCors({
-    origin: ['https://acm-ldq1.vercel.app', 'http://localhost:4200'],
+    origin: ['https://food-meet-ten.vercel.app/', 'http://localhost:4200'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

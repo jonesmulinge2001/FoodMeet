@@ -5,9 +5,9 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { PermissionModule } from 'src/permissions/permission.module';
-import { MailerService } from 'src/shared/mailer/mailer.service';
-import { JwtStrategy } from 'src/strategies/jwt.strategy';
+import { PermissionModule } from '../permissions/permission.module';
+import { MailerService } from '../shared/mailer/mailer.service';
+import { JwtStrategy } from '../strategies/jwt.strategy';
 
 @Module({
   imports: [
