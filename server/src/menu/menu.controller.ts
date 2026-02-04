@@ -20,6 +20,8 @@ import { PermissionGuard } from '../guards/permissions.guard';
 import { RequirePermissions } from '../decorator/permissions.decorator';
 import { Permission } from '../permissions/permission.enum';
 import { RequestWithUser } from '../dto/requestWithUser';
+import { Express } from 'express';
+
 
 @Controller('menu')
 export class MenuController {
