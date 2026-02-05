@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { RegisterRequest, RegisterResponse, VerifyEmailRequest, GenericResponse, LoginRequest, LoginResponse, ResetPasswordRequest } from '../models/auth.models';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({

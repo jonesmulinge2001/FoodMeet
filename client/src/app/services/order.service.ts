@@ -4,7 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { Order, CreateOrderDto, OrderStatus, MenuItem } from '../models/order.model';
 
 import { io, Socket } from 'socket.io-client';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
