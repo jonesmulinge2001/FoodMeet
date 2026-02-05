@@ -87,12 +87,12 @@ export class MenuService {
   // -------------------------
   // GET MENU ITEMS
   // -------------------------
-  getMenuItems(restaurantId: string): Observable<MenuItem[]> {
-    return this.http.get<MenuItem[]>(
-      `${this.baseUrl}/menu/${restaurantId}`,
-      { headers: this.getAuthHeaders() }
-    );
-  }
+// Fetch all menu items (no restaurantId needed)
+getMenuItems(): Observable<MenuItem[]> {
+  return this.http.get<MenuItem[]>(`${this.baseUrl}/menu`, 
+  { headers: this.getAuthHeaders() });
+}
+
 
   getMenuItem(menuItemId: string): Observable<MenuItem> {
     return this.http.get<MenuItem>(
