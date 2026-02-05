@@ -5,7 +5,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import { PrismaClient } from 'generated/prisma/client';
+import { PrismaClient, UserRole } from 'generated/prisma/client';
 import { LoginUserDto } from '../dto/login.user.dto';
 import { RegisterUserDto } from '../dto/register.user.dto';
 import { MailerService } from '../shared/mailer/mailer.service';
@@ -44,7 +44,7 @@ export class AuthService {
         password: hashedPassword,
         name: data.name,
         phone: data.phone,
-        role: data.role,
+        role: data.role ?? UserRole.CUSTOMER,
         verifyToken: verificationCode,
         verifyTokenExpiresAt: expiresAt,
       },
