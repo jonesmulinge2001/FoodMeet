@@ -20,7 +20,7 @@ import { RouterLink } from '@angular/router';
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   showPassword = false;
-  role = ['ADMIN', 'STUDENT'];
+  role = ['ADMIN', 'CUSTOMER'];
 
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
         '',
         [Validators.pattern(/^(?:\+254|0)?7\d{8}$/)],
       ],
-      role: ['STUDENT', Validators.required],
+      role: ['CUSTOMER', Validators.required],
     });
   }
 
