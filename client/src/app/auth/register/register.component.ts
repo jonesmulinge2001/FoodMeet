@@ -31,7 +31,7 @@ export class RegisterComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       phone: [
         '',
-        [Validators.required, Validators.pattern(/^(?:\+254|0)?7\d{8}$/)],
+        [Validators.pattern(/^(?:\+254|0)?7\d{8}$/)],
       ],
       role: ['STUDENT', Validators.required],
     });
@@ -42,9 +42,15 @@ export class RegisterComponent implements OnInit {
       this.registerForm.markAllAsTouched();
       return;
     }
-
-    this.authService.handleRegister(this.registerForm.value);
+  
+    const formValue = { ...this.registerForm.value };
+    if (!formValue.phone) {
+      delete formValue.phone; // remove empty phone
+    }
+  
+    this.authService.handleRegister(formValue);
   }
+  
 
   toggleVisibility(): void {
     this.showPassword = !this.showPassword;

@@ -39,7 +39,7 @@ export class RegisterUserDto {
       return phone;
     })
     @IsPhoneNumber('KE')
-    phone: string;
+    phone?: string;
     
 
     @IsNotEmpty({message: 'Role is required'})
