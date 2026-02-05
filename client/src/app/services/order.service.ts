@@ -1,140 +1,106 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Order, CreateOrderDto, OrderStatus, MenuItem } from '../models/order.model';
-
+import { Order, CreateOrderDto, MenuItem } from '../models/order.model';
 import { io, Socket } from 'socket.io-client';
 import { environment } from '../../environments/environment';
 
-
-@Injectable({
-  providedIn: 'root'
-})
-export class OrderService {
+@Injectable({ providedIn: 'root' })
+export class OrderService implements OnDestroy {
   private apiUrl = environment.apiBase;
   private socket: Socket;
   private currentOrderSubject = new BehaviorSubject<Order | null>(null);
   public currentOrder$ = this.currentOrderSubject.asObservable();
 
-  private cartItemsSubject = new BehaviorSubject<Array<{
-    menuItem: MenuItem;
-    quantity: number;
-  }>>([]);
+  private cartItemsSubject = new BehaviorSubject<Array<{ menuItem: MenuItem; quantity: number }>>([]);
   public cartItems$ = this.cartItemsSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    // Initialize Socket.io connection
     this.socket = io(environment.apiBase);
-    
-    // Listen for order updates
-    this.socket.on('order.confirmed', (order: Order) => {
-      this.handleOrderUpdate(order);
-    });
-    
-    this.socket.on('order.delivered', (order: Order) => {
-      this.handleOrderUpdate(order);
-    });
+
+    this.socket.on('order.confirmed', (order: Order) => this.handleOrderUpdate(order));
+    this.socket.on('order.delivered', (order: Order) => this.handleOrderUpdate(order));
   }
 
-  // Join restaurant room for real-time updates
-  joinRestaurantRoom(restaurantId: string): void {
-    this.socket.emit('joinRestaurant', { restaurantId });
+  // -------------------------
+  // REAL-TIME SOCKETS
+  // -------------------------
+  joinRestaurantRoom(): void {
+    this.socket.emit('joinRestaurant', {}); // No restaurantId needed
   }
 
-  // Join order room for real-time updates
   joinOrderRoom(orderId: string): void {
     this.socket.emit('joinOrder', { orderId });
   }
 
-  // Get restaurant menu
-getRestaurantMenu(restaurantId: string): Observable<MenuItem[]> {
-  return this.http.get<MenuItem[]>(`${this.apiUrl}/menu/${restaurantId}`);
-}
-
-  // Create new order
-  createOrder(restaurantId: string, orderData: CreateOrderDto): Observable<Order> {
-    return this.http.post<Order>(`${this.apiUrl}/orders/${restaurantId}`, orderData);
+  // -------------------------
+  // ORDERS
+  // -------------------------
+  getRestaurantMenu(): Observable<MenuItem[]> {
+    return this.http.get<MenuItem[]>(`${this.apiUrl}/menu`);
   }
 
-  // Get order by ID
+  createOrder(orderData: CreateOrderDto): Observable<Order> {
+    return this.http.post<Order>(`${this.apiUrl}/orders`, orderData);
+  }
+
   getOrder(orderId: string): Observable<Order> {
     return this.http.get<Order>(`${this.apiUrl}/orders/${orderId}`);
   }
 
-  // Get customer orders
   getCustomerOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(`${this.apiUrl}/orders/my-orders`);
   }
 
-  // Add item to cart
+  // -------------------------
+  // CART OPERATIONS
+  // -------------------------
   addToCart(menuItem: MenuItem): void {
     const currentCart = this.cartItemsSubject.value;
-    const existingItemIndex = currentCart.findIndex(item => item.menuItem.id === menuItem.id);
-    
-    if (existingItemIndex > -1) {
-      const updatedCart = [...currentCart];
-      updatedCart[existingItemIndex].quantity += 1;
-      this.cartItemsSubject.next(updatedCart);
+    const existingIndex = currentCart.findIndex(item => item.menuItem.id === menuItem.id);
+    if (existingIndex > -1) {
+      const updated = [...currentCart];
+      updated[existingIndex].quantity += 1;
+      this.cartItemsSubject.next(updated);
     } else {
       this.cartItemsSubject.next([...currentCart, { menuItem, quantity: 1 }]);
     }
   }
 
-  // Remove item from cart
   removeFromCart(menuItemId: string): void {
-    const currentCart = this.cartItemsSubject.value;
-    const updatedCart = currentCart.filter(item => item.menuItem.id !== menuItemId);
-    this.cartItemsSubject.next(updatedCart);
+    this.cartItemsSubject.next(this.cartItemsSubject.value.filter(item => item.menuItem.id !== menuItemId));
   }
 
-  // Update item quantity in cart
   updateCartItemQuantity(menuItemId: string, quantity: number): void {
-    const currentCart = this.cartItemsSubject.value;
-    const updatedCart = currentCart.map(item => {
-      if (item.menuItem.id === menuItemId) {
-        return { ...item, quantity };
-      }
-      return item;
-    }).filter(item => item.quantity > 0);
-    
-    this.cartItemsSubject.next(updatedCart);
+    const updated = this.cartItemsSubject.value
+      .map(item => item.menuItem.id === menuItemId ? { ...item, quantity } : item)
+      .filter(item => item.quantity > 0);
+    this.cartItemsSubject.next(updated);
   }
 
-  // Clear cart
   clearCart(): void {
     this.cartItemsSubject.next([]);
   }
 
-  // Get cart total
   getCartTotal(): number {
-    return this.cartItemsSubject.value.reduce(
-      (total, item) => total + (item.menuItem.price * item.quantity),
-      0
-    );
+    return this.cartItemsSubject.value.reduce((sum, item) => sum + item.menuItem.price * item.quantity, 0);
   }
 
-  // Get cart item count
   getCartItemCount(): number {
-    return this.cartItemsSubject.value.reduce(
-      (count, item) => count + item.quantity,
-      0
-    );
+    return this.cartItemsSubject.value.reduce((sum, item) => sum + item.quantity, 0);
   }
 
-  // Set current order
   setCurrentOrder(order: Order): void {
     this.currentOrderSubject.next(order);
   }
 
-  // Handle order update from socket
   private handleOrderUpdate(order: Order): void {
-    const currentOrder = this.currentOrderSubject.value;
-    if (currentOrder && currentOrder.id === order.id) {
+    const current = this.currentOrderSubject.value;
+    if (current && current.id === order.id) {
       this.currentOrderSubject.next(order);
     }
   }
 
-  // Cleanup
   ngOnDestroy(): void {
     this.socket.disconnect();
   }
