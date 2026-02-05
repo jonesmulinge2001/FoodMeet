@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Transform } from 'class-transformer';
-import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, MaxLength, MinLength } from 'class-validator';
 import { UserRole } from 'generated/prisma/enums';
 export class RegisterUserDto {
   @IsString({ message: 'Name must be a string' })
@@ -24,6 +24,7 @@ export class RegisterUserDto {
     @MinLength(6, {message: 'Password must be at least 6 characters long'})
     password: string;
 
+    @IsOptional()
     @Transform(({ value }) => {
       if (!value) return value;
       let phone = value.trim();
@@ -48,5 +49,5 @@ export class RegisterUserDto {
     @IsEnum(UserRole, {
         message: 'Invalid role. Please choose from: ${#EnumValues}',
     })
-    role: UserRole;
+    role?: UserRole;
 }
