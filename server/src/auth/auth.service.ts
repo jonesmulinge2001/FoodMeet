@@ -43,7 +43,7 @@ export class AuthService {
         email: data.email,
         password: hashedPassword,
         name: data.name,
-        phone: data.phone,
+        phone: data.phone ?? null,
         role: data.role ?? UserRole.CUSTOMER,
         verifyToken: verificationCode,
         verifyTokenExpiresAt: expiresAt,
@@ -53,7 +53,7 @@ export class AuthService {
     try {
       await this.mailerService.sendEmail({
         to: user.email,
-        subject: 'Verify Your Email - Car Rentals',
+        subject: 'Verify Your Email - FoodMeet',
         html: `<p>Hi ${user.name},</p>
                <p>Your email verification code is:</p>
                <h2>${verificationCode}</h2>
