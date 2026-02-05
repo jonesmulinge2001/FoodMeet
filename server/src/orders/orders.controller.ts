@@ -14,63 +14,50 @@ export class OrdersController {
   // =====================================================
   // CUSTOMER: PLACE ORDER
   // =====================================================
-  @Post(':restaurantId')
-  async createOrder(
-    @Param('restaurantId') restaurantId: string,
-    @Body() dto: CreateOrderDto,
-    @Req() req: any,
-  ) {
-    // Customer may be logged in or a guest
-    const customerId = req.user?.id ?? null;
-
-    return this.ordersService.createOrder(restaurantId, customerId, dto);
-  }
+// CUSTOMER: PLACE ORDER
+@Post()
+async createOrder(@Body() dto: CreateOrderDto, @Req() req: any) {
+  const customerId = req.user?.id ?? null;
+  return this.ordersService.createOrder(customerId, dto);
+}
 
   // =====================================================
   // WAITER / STAFF: VIEW ALL ORDERS
   // =====================================================
-  @Get('restaurant/:restaurantId')
-  async getAllOrders(@Param('restaurantId') restaurantId: string) {
-    return this.ordersService.getAllOrders(restaurantId);
-  }
+@Get('all')
+async getAllOrders() {
+  return this.ordersService.getAllOrders();
+}
 
   // =====================================================
   // WAITER: VIEW DINE-IN ORDERS
   // =====================================================
-  @Get('restaurant/:restaurantId/dine-in')
-  async getDineInOrders(@Param('restaurantId') restaurantId: string) {
-    return this.ordersService.getDineInOrders(restaurantId);
+  @Get('dine-in')
+  async getDineInOrders() {
+    return this.ordersService.getDineInOrders();
   }
-
-  // =====================================================
-  // WAITER: VIEW TAKEAWAY ORDERS
-  // =====================================================
-  @Get('restaurant/:restaurantId/takeaway')
-  async getTakeawayOrders(@Param('restaurantId') restaurantId: string) {
-    return this.ordersService.getTakeawayOrders(restaurantId);
+  
+  @Get('takeaway')
+  async getTakeawayOrders() {
+    return this.ordersService.getTakeawayOrders();
   }
-
-  // =====================================================
-  // WAITER: VIEW DELIVERY ORDERS
-  // =====================================================
-  @Get('restaurant/:restaurantId/delivery')
-  async getDeliveryOrders(@Param('restaurantId') restaurantId: string) {
-    return this.ordersService.getDeliveryOrders(restaurantId);
+  
+  @Get('delivery')
+  async getDeliveryOrders() {
+    return this.ordersService.getDeliveryOrders();
   }
-
   // =====================================================
   // WAITER: CONFIRM ORDER
   // =====================================================
-  @Patch(':orderId/confirm')
-  async confirmOrder(@Param('orderId') orderId: string) {
-    return this.ordersService.confirmOrder(orderId);
-  }
+// CONFIRM ORDER
+@Patch(':orderId/confirm')
+async confirmOrder(@Param('orderId') orderId: string) {
+  return this.ordersService.confirmOrder(orderId);
+}
 
-  // =====================================================
-  // WAITER: DELIVER ORDER
-  // =====================================================
-  @Patch(':orderId/deliver')
-  async deliverOrder(@Param('orderId') orderId: string) {
-    return this.ordersService.deliverOrder(orderId);
-  }
+// DELIVER ORDER
+@Patch(':orderId/deliver')
+async deliverOrder(@Param('orderId') orderId: string) {
+  return this.ordersService.deliverOrder(orderId);
+}
 }

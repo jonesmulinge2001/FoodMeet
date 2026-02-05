@@ -1,11 +1,10 @@
 @baseUrl = http://localhost:3000
-@restaurantId = 687e5304-cc69-4783-89a7-513a097a709a
 @menuItemId = 52513034-523e-4413-aae0-f1337bbb1c28
 @orderId = ORDER_ID_HERE
 @token = YOUR_JWT_TOKEN_HERE
 
 ### CUSTOMER: PLACE ORDER
-POST {{baseUrl}}/orders/{{restaurantId}}
+POST {{baseUrl}}/orders
 Content-Type: application/json
 
 {
@@ -20,23 +19,26 @@ Content-Type: application/json
   "seatNumber": 2
 }
 
-
 ### WAITER / STAFF: VIEW ALL ORDERS
-GET {{baseUrl}}/orders/restaurant/{{restaurantId}}
+GET {{baseUrl}}/orders
 Authorization: Bearer {{token}}
 
 ### WAITER: VIEW DINE-IN ORDERS
-GET {{baseUrl}}/orders/restaurant/{{restaurantId}}/dine-in
+GET {{baseUrl}}/orders/dine-in
+Authorization: Bearer {{token}}
 
 ### WAITER: VIEW TAKEAWAY ORDERS
-GET {{baseUrl}}/orders/restaurant/{{restaurantId}}/takeaway
+GET {{baseUrl}}/orders/takeaway
+Authorization: Bearer {{token}}
 
 ### WAITER: VIEW DELIVERY ORDERS
-GET {{baseUrl}}/orders/restaurant/{{restaurantId}}/delivery
+GET {{baseUrl}}/orders/delivery
+Authorization: Bearer {{token}}
 
 ### WAITER: CONFIRM ORDER
 PATCH {{baseUrl}}/orders/{{orderId}}/confirm
+Authorization: Bearer {{token}}
 
 ### WAITER: DELIVER ORDER
 PATCH {{baseUrl}}/orders/{{orderId}}/deliver
-
+Authorization: Bearer {{token}}

@@ -53,12 +53,23 @@ export class MenuService {
   // ================================
   // GET ALL MENU ITEMS FOR A RESTAURANT
   // ================================
-  async getMenuItems(restaurantId: string): Promise<MenuItem[]> {
-    return this.prisma.menuItem.findMany({
-      where: { restaurantId },
-      orderBy: { createdAt: 'desc' },
-    });
+// ================================
+// GET ALL MENU ITEMS (SINGLE RESTAURANT MODE)
+// ================================
+async getMenuItems(): Promise<MenuItem[]> {
+  const restaurant = await this.prisma.restaurant.findFirst();
+  if (!restaurant) {
+    throw new NotFoundException('No restaurant found');
   }
+
+  return this.prisma.menuItem.findMany({
+    where: { restaurantId: restaurant.id },
+    orderBy: { createdAt: 'desc' },
+  });
+}
+
+  
+  
 
   // ================================
   // GET SINGLE MENU ITEM

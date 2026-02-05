@@ -20,7 +20,7 @@ import { Server, Socket } from 'socket.io';
 })
 export class OrdersGateway {
   @WebSocketServer()
-  server: Server;
+  server?: Server;
 
   // ----------------------------------------
   // JOIN RESTAURANT ROOM (STAFF / WAITERS)
@@ -51,7 +51,7 @@ export class OrdersGateway {
   // ----------------------------------------
   emitNewOrder(order: any) {
     const room = `restaurant:${order.restaurantId}`;
-    this.server.to(room).emit('order.created', order);
+    this.server!.to(room).emit('order.created', order);
   }
 
   // ----------------------------------------
@@ -59,7 +59,7 @@ export class OrdersGateway {
   // ----------------------------------------
   emitOrderConfirmed(order: any) {
     const room = `order:${order.id}`;
-    this.server.to(room).emit('order.confirmed', order);
+    this.server!.to(room).emit('order.confirmed', order);
   }
 
   // ----------------------------------------
@@ -67,6 +67,6 @@ export class OrdersGateway {
   // ----------------------------------------
   emitOrderDelivered(order: any) {
     const room = `order:${order.id}`;
-    this.server.to(room).emit('order.delivered', order);
+    this.server!.to(room).emit('order.delivered', order);
   }
 }

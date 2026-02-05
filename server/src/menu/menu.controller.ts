@@ -46,11 +46,9 @@ export class MenuController {
   // ================================
   // GET ALL MENU ITEMS
   // ================================
-  @Get(':restaurantId')
-  // @UseGuards(JwtAuthGuard, PermissionGuard)
-  // @RequirePermissions(Permission.CREATE_MENU)
-  async getMenuItems(@Param('restaurantId') restaurantId: string) {
-    return this.menuService.getMenuItems(restaurantId);
+  @Get()
+  async getMenuItems() {
+    return this.menuService.getMenuItems();
   }
 
   // ================================
