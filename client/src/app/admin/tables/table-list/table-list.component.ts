@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TableService } from '../../../services/table.service';
 import { Table } from '../../../models/table.model';
 import { ToastrService } from 'ngx-toastr';
@@ -11,10 +11,13 @@ import { SeatListComponent } from "../../seats/seat-list/seat-list.component";
   selector: 'app-table-list',
   templateUrl: './table-list.component.html',
 })
-export class TableListComponent {
-  @Input() restaurantId!: string;
-  @Input() tables: Table[] = [];
-
+export class TableListComponent implements OnInit {
+  // Remove restaurantId input since we don't need it anymore
+  // @Input() restaurantId!: string;
+  
+  // Instead of receiving tables as input, load them in ngOnInit
+  tables: Table[] = [];
+  
   loading: boolean = false;
 
   tableNumber: number = 1;
@@ -28,10 +31,29 @@ export class TableListComponent {
     private toastr: ToastrService
   ) {}
 
-  // ✅ Add Table
+  ngOnInit() {
+    this.loadTables();
+  }
+
+  // Load all tables
+  loadTables() {
+    this.loading = true;
+    this.tableService.getTables().subscribe({
+      next: (tables) => {
+        this.tables = tables;
+        this.loading = false;
+      },
+      error: () => {
+        this.toastr.error('Failed to load tables');
+        this.loading = false;
+      }
+    });
+  }
+
+  // ✅ Add Table (without restaurantId)
   addTable() {
     this.tableService
-      .addTable(this.restaurantId, this.tableNumber, this.seatsCount)
+      .addTable(this.tableNumber, this.seatsCount) // Removed restaurantId parameter
       .subscribe({
         next: (newTable) => {
           this.tables.push(newTable);

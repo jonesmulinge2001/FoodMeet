@@ -17,19 +17,36 @@ export class TableService {
 
   constructor(private http: HttpClient) {}
 
-  addTable(restaurantId: string, tableNumber: number, seatsCount: number): Observable<Table> {
+  // Remove restaurantId parameter
+  addTable(tableNumber: number, seatsCount: number): Observable<Table> {
     return this.http.post<Table>(
-      `${this.baseUrl}/restaurants/${restaurantId}/tables`,
+      // Update endpoint to not include restaurantId
+      `${this.baseUrl}/tables`, // Changed from /restaurants/${restaurantId}/tables
       { tableNumber, seatsCount },
       { headers: this.getAuthHeaders() }
     );
   }
 
   updateTable(tableId: string, tableNumber: number): Observable<Table> {
-    return this.http.patch<Table>(`${this.baseUrl}/restaurants/tables/${tableId}`, { tableNumber }, { headers: this.getAuthHeaders() });
+    return this.http.patch<Table>(
+      `${this.baseUrl}/tables/${tableId}`, 
+      { tableNumber }, 
+      { headers: this.getAuthHeaders() }
+    );
   }
 
   deleteTable(tableId: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/restaurants/tables/${tableId}`, { headers: this.getAuthHeaders() });
+    return this.http.delete(
+      `${this.baseUrl}/tables/${tableId}`, 
+      { headers: this.getAuthHeaders() }
+    );
+  }
+  
+  // Optionally add method to get all tables
+  getTables(): Observable<Table[]> {
+    return this.http.get<Table[]>(
+      `${this.baseUrl}/tables`,
+      { headers: this.getAuthHeaders() }
+    );
   }
 }

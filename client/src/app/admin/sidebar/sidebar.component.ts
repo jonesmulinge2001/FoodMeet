@@ -28,7 +28,8 @@ export class SidebarComponent {
   menuItems: MenuItem[] = [
     { id: 'dashboard', label: 'Dashboard Overview', icon: 'dashboard', route: '/admin/dashboard' },
     { id: 'users', label: 'User Management', icon: 'group', route: '/admin/manage-users' },
-    { id: 'restaurant-list', label: 'Restaurant', icon: 'article', route: '/admin/restaurant-list' },
+    { id: 'menu-list', label: 'Menu', icon: 'article', route: '/admin/menu-list' },
+    { id: 'table-list', label: 'Tables', icon: 'article', route: '/admin/table-list' },
     // { id: 'restaurant-form', label: 'Create', icon: 'article', route: '/admin/restaurants-create' },
     // { id: 'menu', label: 'Menu', icon: 'article', route: '/admin/menu' },
     { id: 'Logout', label: 'Logout', icon: 'logout', route: '/login' },

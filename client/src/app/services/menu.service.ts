@@ -18,10 +18,9 @@ export class MenuService {
   }
 
   // -------------------------
-  // CREATE MENU ITEM
+  // CREATE MENU ITEM (without restaurantId)
   // -------------------------
   createMenuItem(
-    restaurantId: string,
     data: {
       name: string;
       description?: string;
@@ -33,26 +32,24 @@ export class MenuService {
     if (imageFile) {
       const formData = new FormData();
       formData.append('name', data.name);
-      formData.append('price', JSON.stringify(data.price)); 
-      formData.append('isAvailable', JSON.stringify(data.isAvailable)); 
+      formData.append('price', data.price.toString());
+      formData.append('isAvailable', data.isAvailable.toString());
       if (data.description) formData.append('description', data.description);
       formData.append('image', imageFile);
-  
+
       return this.http.post<MenuItem>(
-        `${this.baseUrl}/menu/${restaurantId}`,
+        `${this.baseUrl}/menu`, // Changed: removed /${restaurantId}
         formData,
         { headers: this.getAuthHeaders() }
       );
     } else {
-      // send JSON when no file
       return this.http.post<MenuItem>(
-        `${this.baseUrl}/menu/${restaurantId}`,
+        `${this.baseUrl}/menu`, // Changed: removed /${restaurantId}
         data,
         { headers: this.getAuthHeaders() }
       );
     }
   }
-  
 
   // -------------------------
   // UPDATE MENU ITEM
@@ -87,12 +84,10 @@ export class MenuService {
   // -------------------------
   // GET MENU ITEMS
   // -------------------------
-// Fetch all menu items (no restaurantId needed)
-getMenuItems(): Observable<MenuItem[]> {
-  return this.http.get<MenuItem[]>(`${this.baseUrl}/menu`, 
-  { headers: this.getAuthHeaders() });
-}
-
+  getMenuItems(): Observable<MenuItem[]> {
+    return this.http.get<MenuItem[]>(`${this.baseUrl}/menu`, 
+    { headers: this.getAuthHeaders() });
+  }
 
   getMenuItem(menuItemId: string): Observable<MenuItem> {
     return this.http.get<MenuItem>(

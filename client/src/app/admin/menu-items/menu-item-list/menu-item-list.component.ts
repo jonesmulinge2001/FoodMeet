@@ -99,8 +99,8 @@ export class MenuListComponent {
       return;
     }
 
-    // Create new item
-    this.menuService.createMenuItem('', payload, this.imageFile || undefined).subscribe({
+    // Create new item - REMOVED restaurantId parameter
+    this.menuService.createMenuItem(payload, this.imageFile || undefined).subscribe({
       next: (created) => {
         this.menuItems.unshift(created);
         this.toastr.success('Menu item added');

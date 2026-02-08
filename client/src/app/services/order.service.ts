@@ -104,4 +104,49 @@ export class OrderService implements OnDestroy {
   ngOnDestroy(): void {
     this.socket.disconnect();
   }
+
+
+// -------------------------
+// STAFF METHODS
+// -------------------------
+getAllOrders(): Observable<Order[]> {
+  return this.http.get<Order[]>(`${this.apiUrl}/orders/all`);
+}
+
+getDineInOrders(): Observable<Order[]> {
+  return this.http.get<Order[]>(`${this.apiUrl}/orders/dine-in`);
+}
+
+getTakeawayOrders(): Observable<Order[]> {
+  return this.http.get<Order[]>(`${this.apiUrl}/orders/takeaway`);
+}
+
+getDeliveryOrders(): Observable<Order[]> {
+  return this.http.get<Order[]>(`${this.apiUrl}/orders/delivery`);
+}
+
+confirmOrder(orderId: string): Observable<Order> {
+  return this.http.patch<Order>(`${this.apiUrl}/orders/${orderId}/confirm`, {});
+}
+
+deliverOrder(orderId: string): Observable<Order> {
+  return this.http.patch<Order>(`${this.apiUrl}/orders/${orderId}/deliver`, {});
+}
+
+// Staff WebSocket events
+listenForNewOrders(): Observable<Order> {
+  return new Observable<Order>(observer => {
+    this.socket.on('order.created', (order: Order) => {
+      observer.next(order);
+    });
+  });
+}
+
+listenForOrderUpdates(): Observable<Order> {
+  return new Observable<Order>(observer => {
+    this.socket.on('order.updated', (order: Order) => {
+      observer.next(order);
+    });
+  });
+}
 }
