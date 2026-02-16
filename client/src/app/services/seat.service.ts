@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class SeatService {
-  private baseUrl = `${environment.apiBase}`;
+  private baseUrl = environment.apiBase;
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -17,11 +17,20 @@ export class SeatService {
 
   constructor(private http: HttpClient) {}
 
+  // Add a seat to a table
   addSeat(tableId: string, seatNumber: number): Observable<Seat> {
-    return this.http.post<Seat>(`${this.baseUrl}/restaurants/tables/${tableId}/seats`, { seatNumber }, {  headers: this.getAuthHeaders() });
+    return this.http.post<Seat>(
+      `${this.baseUrl}/tables/${tableId}/seats`,
+      { seatNumber },
+      { headers: this.getAuthHeaders() }
+    );
   }
 
+  // Delete a seat by ID
   deleteSeat(seatId: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/restaurants/seats/${seatId}`, {  headers: this.getAuthHeaders() });
+    return this.http.delete(
+      `${this.baseUrl}/tables/seats/${seatId}`,
+      { headers: this.getAuthHeaders() }
+    );
   }
 }
