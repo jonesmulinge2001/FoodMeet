@@ -22,25 +22,25 @@ import { Permission } from '../permissions/permission.enum';
 import { RequestWithUser } from '../dto/requestWithUser';
 import { Express } from 'express';
 
-
 @Controller('menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
   // ================================
-  // CREATE MENU ITEM
+  // CREATE MENU ITEM (updated without restaurantId)
   // ================================
-  @Post(':restaurantId')
+  @Post()
   @UseGuards(JwtAuthGuard, PermissionGuard)
   @RequirePermissions(Permission.CREATE_MENU)
   @UseInterceptors(FileInterceptor('image'))
   async createMenuItem(
-    @Param('restaurantId') restaurantId: string,
     @Body() dto: CreateMenuItemDto,
     @UploadedFile() file: Express.Multer.File,
     @Req() req: RequestWithUser
   ) {
-    return this.menuService.createMenuItem(req.user.id, restaurantId, dto, file);
+    // Remove restaurantId parameter and ownerId from service call
+    // Keep ownerId if you need it for auditing/logging, but not for data creation
+    return this.menuService.createMenuItem(dto, file);
   }
 
   // ================================
