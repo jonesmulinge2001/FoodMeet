@@ -26,8 +26,6 @@ model User {
   isDeleted            Boolean   @default(false)
   deletedAt            DateTime?
 
-  // 🔹 Add back-relations
-  ownedRestaurants Restaurant[] @relation("OwnerRestaurants") // matches Restaurant.owner
   orders           Order[]      @relation("CustomerOrders")   // matches Order.customer
 }
 
@@ -49,34 +47,14 @@ enum OrderType {
   TAKEAWAY
 }
 
-model Restaurant {
-  id       String  @id @default(uuid())
-  name     String
-  location String?
-
-  ownerId String
-  owner   User   @relation("OwnerRestaurants", fields: [ownerId], references: [id])
-
-  tables    Table[]
-  menuItems MenuItem[]
-  orders    Order[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
 
 model Table {
   id          String @id @default(uuid())
   tableNumber Int
 
-  restaurantId String
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
-
   seats Seat[]  
 
   createdAt DateTime @default(now())
-
-  @@unique([restaurantId, tableNumber])
 }
 
 
@@ -101,9 +79,6 @@ model MenuItem {
   imageUrl    String?
   isAvailable Boolean @default(true)
 
-  restaurantId String
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
-
   orderItems OrderItem[]
 
   createdAt DateTime @default(now())
@@ -123,9 +98,6 @@ model Order {
   // DELIVERY specific
   deliveryAddress String?
   deliveryPhone   String?
-
-  restaurantId String
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
 
   customerId String?
   customer   User? @relation("CustomerOrders", fields: [customerId], references: [id])
